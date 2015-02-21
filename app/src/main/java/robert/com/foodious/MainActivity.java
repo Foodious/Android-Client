@@ -1,31 +1,21 @@
-package robert.com.foodius;
+package robert.com.foodious;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
-
-import java.text.DateFormat;
-import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class MainActivity extends Activity implements PlaceListFragment.OnFragmentInteractionListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -39,10 +29,24 @@ public class MainActivity extends Activity implements PlaceListFragment.OnFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*try {
+            final int titleId =
+                    Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
+            TextView title = (TextView) getWindow().findViewById(titleId);
+            if (title != null)
+            {
+                String tempString="Foodious";
+                SpannableString spanString = new SpannableString(tempString);
+                spanString.setSpan(new StyleSpan(Typeface.ITALIC), 0, spanString.length(), 0);
+                title.setText(spanString);
+            }
+        } catch (Exception e) {
+            Log.d("", "Failed to obtain action bar title reference");
+        }*/
         setContentView(R.layout.activity_main);
-        foodBtn = (Button) findViewById(R.id.FoodButton);
-        foodBtn.setOnClickListener(foodButtonListener);
         buildGoogleApiClient();
+
+
 
     }
 
@@ -56,6 +60,12 @@ public class MainActivity extends Activity implements PlaceListFragment.OnFragme
     protected void onStop(){
         mGoogleApiClient.disconnect();
         super.onStop();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mGoogleApiClient.reconnect();
     }
 
 
@@ -80,30 +90,6 @@ public class MainActivity extends Activity implements PlaceListFragment.OnFragme
 
         return super.onOptionsItemSelected(item);
     }
-
-    public View.OnClickListener foodButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.FoodList);
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-
-            Fragment placeList = new PlaceListFragment();
-
-
-            Bundle args = new Bundle();
-
-            placeList.setArguments(args);
-            placeList.getArguments().putDouble("latitude", mLatitude);
-            placeList.getArguments().putDouble("longitude", mLongitude);
-            transaction.add(R.id.FoodList, placeList).commit();
-        }
-    };
-
-
-
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -132,6 +118,15 @@ public class MainActivity extends Activity implements PlaceListFragment.OnFragme
             mLatitude = mLastLocation.getLatitude();
             mLongitude = mLastLocation.getLongitude();
         }
+        LinearLayout layout = (LinearLayout) findViewById(R.id.FoodList);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment placeList = new PlaceListFragment();
+        Bundle args = new Bundle();
+
+        placeList.setArguments(args);
+        placeList.getArguments().putDouble("latitude", mLatitude);
+        placeList.getArguments().putDouble("longitude", mLongitude);
+        transaction.add(R.id.FoodList, placeList).commit();
 
     }
 

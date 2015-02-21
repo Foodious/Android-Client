@@ -1,9 +1,8 @@
-package robert.com.foodius;
+package robert.com.foodious;
 
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Loader;
-import android.location.Location;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,7 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import robert.com.foodius.dummy.DummyContent;
+import robert.com.foodious.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
@@ -120,8 +119,23 @@ public class PlaceListFragment extends Fragment implements AbsListView.OnItemCli
         if (!mGlobalList.isEmpty())
         {
             int random = (int) ((Math.random() * 100) % mGlobalList.size());
-            onePlace.clear();
-            onePlace.add(mGlobalList.get(random));
+            if (!onePlace.isEmpty())
+            {
+                FoodPlace temp = onePlace.get(0);
+                onePlace.clear();
+                onePlace.add(mGlobalList.get(random));
+                while (onePlace.get(0).equals(temp))
+                {
+                    random = (int) ((Math.random() * 100) % mGlobalList.size());
+                    onePlace.clear();
+                    onePlace.add(mGlobalList.get(random));
+                }
+            }
+            else
+            {
+                onePlace.add(mGlobalList.get(random));
+            }
+
             mAdapter = new ArrayAdapter<FoodPlace>(getActivity(),
                     android.R.layout.simple_list_item_1, android.R.id.text1, onePlace);
             mListView.setAdapter(mAdapter);
@@ -174,11 +188,10 @@ public class PlaceListFragment extends Fragment implements AbsListView.OnItemCli
             mAdapter = new ArrayAdapter<FoodPlace>(getActivity(),
                     android.R.layout.simple_list_item_1, android.R.id.text1, foodPlaces);
             mGlobalList = foodPlaces;
-            mListView.setAdapter(mAdapter);
+            randomizer();
 
             Button foodBtn = (Button) getActivity().findViewById(R.id.FoodButton);
             foodBtn.setOnClickListener(randomButtonListener);
-            foodBtn.setText(R.string.random_button_text);
         }
 
 

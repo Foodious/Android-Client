@@ -1,4 +1,4 @@
-package robert.com.foodius;
+package robert.com.foodious;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,4 +1,4 @@
-package robert.com.foodius;
+package robert.com.foodious;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +13,18 @@ public class FoodPlace implements Serializable{
 
     public FoodPlace(JSONObject json) throws JSONException {
         placeName = json.getString("name");
+    }
+
+    public FoodPlace(FoodPlace fP) { placeName = fP.placeName; }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof FoodPlace)
+        {
+            return placeName.equals(((FoodPlace) o).placeName);
+        }
+        return false;
     }
 
     @Override

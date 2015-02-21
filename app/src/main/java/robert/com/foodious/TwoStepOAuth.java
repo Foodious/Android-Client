@@ -1,4 +1,4 @@
-package robert.com.foodius;
+package robert.com.foodious;
 import org.scribe.builder.api.DefaultApi10a;
 import org.scribe.model.Token;
 

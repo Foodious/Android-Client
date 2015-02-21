@@ -1,7 +1,6 @@
-package robert.com.foodius;
+package robert.com.foodious;
 
 
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 import org.json.simple.JSONArray;
@@ -13,8 +12,6 @@ import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
-
-import java.text.ParseException;
 
 /**
  * Code sample for accessing the Yelp API V2.

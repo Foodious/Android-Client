@@ -1,4 +1,4 @@
-package robert.com.foodius.dummy;
+package robert.com.foodious.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

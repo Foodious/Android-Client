@@ -1,4 +1,4 @@
-package robert.com.foodius;
+package robert.com.foodious;
 
         import android.content.AsyncTaskLoader;
         import android.content.Context;
