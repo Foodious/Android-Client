@@ -52,6 +52,7 @@ public class MainActivity extends Activity implements AbsListView.OnItemClickLis
         } catch (Exception e) {
             Log.d("", "Failed to obtain action bar title reference");
         }*/
+        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
         buildGoogleApiClient();
 
@@ -169,6 +170,7 @@ public class MainActivity extends Activity implements AbsListView.OnItemClickLis
         }
         if(!loaded) {
             getLoaderManager().initLoader(0, null, this).forceLoad();
+            loaded = true;
         }
     }
 
