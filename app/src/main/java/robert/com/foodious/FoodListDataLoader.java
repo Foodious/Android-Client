@@ -19,14 +19,14 @@ public class FoodListDataLoader extends AsyncTaskLoader<List<FoodPlace>> {
 
     private final Context mContext;
     private final URL mUrl;
-    private final double mLaditude;
+    private final double mLatitude;
     private final double mLongitude;
 
-    public FoodListDataLoader(Context context, URL url, double longitude, double laditude) {
+    public FoodListDataLoader(Context context, URL url, double longitude, double latitude) {
         super(context);
         mContext = context;
         mUrl = url;
-        mLaditude = laditude;
+        mLatitude = latitude;
         mLongitude = longitude;
     }
 
@@ -35,7 +35,7 @@ public class FoodListDataLoader extends AsyncTaskLoader<List<FoodPlace>> {
         String data = null;
         final List<FoodPlace> foodPlaces = new ArrayList<FoodPlace>();
         final YelpAPI yelp = new YelpAPI("YMl-kgcfLZx4gZD5u8_F-A","zUOwQydRroPzJbOwviwqY7R5SUg","4QOuLvpnFenNxzReWcSaOiFKy699YuM3","h8NLol4R7QNKEqBbgJcsoaLy5Rc");
-        final String string = yelp.searchForBusinessesByLocation("food", Double.toString(mLaditude), Double.toString(mLongitude));
+        final String string = yelp.searchForBusinessesByLocation("food", Double.toString(mLatitude), Double.toString(mLongitude));
         if(!string.isEmpty() || string != null) {
             try {
                 final JSONObject response = new JSONObject(string);

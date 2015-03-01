@@ -7,23 +7,23 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="426dp"
-        android:id="@+id/FoodList"
-        android:layout_weight="0.70"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.05" />
 
     <Button
         android:id="@+id/FoodButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/random_button_text"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:textColor="#ffffffff"
         android:textStyle="italic"
         android:background="@drawable/custom_button"
-        />
+        android:layout_gravity="bottom" />
 
 
 </LinearLayout>

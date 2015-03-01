@@ -32,7 +32,7 @@ public class YelpAPI {
     private static final int SEARCH_LIMIT = 20;
     private static final String SEARCH_PATH = "/v2/search";
     private static final String BUSINESS_PATH = "/v2/business";
-    private static final int RADIUS_FILTER = 100;
+    private static final int RADIUS_FILTER = 500;
 
     /*
      * Update OAuth credentials below from the Yelp Developers API site:

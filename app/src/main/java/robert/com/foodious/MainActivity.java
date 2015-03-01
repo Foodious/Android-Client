@@ -3,28 +3,37 @@ package robert.com.foodious;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends Activity implements PlaceListFragment.OnFragmentInteractionListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+import java.util.List;
+
+public class MainActivity extends Activity implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<List<FoodPlace>>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private double mLatitude;
     private double mLongitude;
-    private Button foodBtn;
-    private LocationRequest mLocationRequest;
+    private boolean loaded = false;
+    FoodPlace foodPlace;
+    private List<FoodPlace> mGlobalList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,10 +108,52 @@ public class MainActivity extends Activity implements PlaceListFragment.OnFragme
                 .build();
     }
 
+    public void randomizer(){
+        TextView textView = (TextView) findViewById(R.id.textView);
+        if (!mGlobalList.isEmpty())
+        {
+            int random = (int) ((Math.random() * 100) % mGlobalList.size());
+            foodPlace = mGlobalList.get(random);
+            mGlobalList.remove(random);
+            String s = foodPlace.toString();
+            textView.setText(s);
+        }
+        else
+        {
+            textView.setText("No more restaurants near you :'(");
+        }
+    }
 
+    public View.OnClickListener randomButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            randomizer();
+
+        }
+    };
 
     @Override
-    public void onFragmentInteraction(String id) {
+    public Loader<List<FoodPlace>> onCreateLoader(int i, Bundle bundle) {
+        return new FoodListDataLoader(this,null, mLongitude, mLatitude);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<FoodPlace>> listLoader, List<FoodPlace> foodPlaces) {
+        if(foodPlaces!=null){
+            loaded = true;
+            mGlobalList = foodPlaces;
+            randomizer();
+
+            Button foodBtn = (Button) findViewById(R.id.FoodButton);
+            foodBtn.setOnClickListener(randomButtonListener);
+            foodBtn.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<FoodPlace>> listLoader) {
 
     }
 
@@ -113,21 +164,12 @@ public class MainActivity extends Activity implements PlaceListFragment.OnFragme
         Log.d("LocationShit", "mLastLocation is " + mLastLocation);
 
         if(mLastLocation != null){
-            findViewById(R.id.FoodButton).setVisibility(View.VISIBLE);
-            Fragment foodList = getFragmentManager().findFragmentById(R.id.FoodList);
             mLatitude = mLastLocation.getLatitude();
             mLongitude = mLastLocation.getLongitude();
         }
-        LinearLayout layout = (LinearLayout) findViewById(R.id.FoodList);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        Fragment placeList = new PlaceListFragment();
-        Bundle args = new Bundle();
-
-        placeList.setArguments(args);
-        placeList.getArguments().putDouble("latitude", mLatitude);
-        placeList.getArguments().putDouble("longitude", mLongitude);
-        transaction.add(R.id.FoodList, placeList).commit();
-
+        if(!loaded) {
+            getLoaderManager().initLoader(0, null, this).forceLoad();
+        }
     }
 
     @Override
@@ -137,6 +179,11 @@ public class MainActivity extends Activity implements PlaceListFragment.OnFragme
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
     }
 }
