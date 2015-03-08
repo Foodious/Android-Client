@@ -8,6 +8,8 @@ package robert.com.foodious;
         import org.json.JSONException;
         import org.json.JSONObject;
 
+        import java.net.MalformedURLException;
+        import java.net.URISyntaxException;
         import java.net.URL;
         import java.util.ArrayList;
         import java.util.List;
@@ -47,6 +49,8 @@ public class FoodListDataLoader extends AsyncTaskLoader<List<FoodPlace>> {
                 }
 
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
 

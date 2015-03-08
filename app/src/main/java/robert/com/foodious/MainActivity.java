@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,7 +24,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.squareup.picasso.Picasso;
 
+import android.net.Uri;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<List<FoodPlace>>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
@@ -34,6 +41,9 @@ public class MainActivity extends Activity implements AbsListView.OnItemClickLis
     private boolean loaded = false;
     FoodPlace foodPlace;
     private List<FoodPlace> mGlobalList;
+    private List<FoodPlace> removed;
+    private boolean picky;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +65,7 @@ public class MainActivity extends Activity implements AbsListView.OnItemClickLis
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
         buildGoogleApiClient();
-
-
-
+        removed = new ArrayList<FoodPlace>();
     }
 
     @Override
@@ -111,23 +119,46 @@ public class MainActivity extends Activity implements AbsListView.OnItemClickLis
 
     public void randomizer(){
         TextView textView = (TextView) findViewById(R.id.textView);
+        TextView textView2 = (TextView) findViewById(R.id.textView2);
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+
         if (!mGlobalList.isEmpty())
         {
             int random = (int) ((Math.random() * 100) % mGlobalList.size());
             foodPlace = mGlobalList.get(random);
+            removed.add(foodPlace);
             mGlobalList.remove(random);
-            String s = foodPlace.toString();
-            textView.setText(s);
+            Uri uri = foodPlace.imageUri;
+            Log.d("LOADING", uri.toString());
+            Picasso.with(this).load(uri).into(imageView);
+            textView.setText(foodPlace.placeName);
+            textView2.setText("Rating: " + foodPlace.rating + "/5.0 Stars\n" +
+                    "Distance: " + (int) foodPlace.distance + " m");
         }
         else
         {
-            textView.setText("No more restaurants near you :'(");
+            picky = true;
+            textView.setText("No more restaurants near you :'(\nHit 'Explore!' to start over!");
+            Picasso.with(this).load("http://cliparts.co/cliparts/6iy/Xx8/6iyXx8EjT.gif").into(imageView);
+            //imageView.setVisibility(View.INVISIBLE);
+            textView2.setVisibility(View.INVISIBLE);
         }
     }
 
     public View.OnClickListener randomButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (picky)
+            {
+                while (!removed.isEmpty())
+                {
+                    mGlobalList.add(removed.get(0));
+                    removed.remove(0);
+                }
+                ((ImageView) findViewById(R.id.imageView)).setVisibility(View.VISIBLE);
+                ((TextView) findViewById(R.id.textView2)).setVisibility(View.VISIBLE);
+                picky = false;
+            }
             randomizer();
 
         }

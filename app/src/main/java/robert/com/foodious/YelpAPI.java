@@ -27,12 +27,12 @@ import org.scribe.oauth.OAuthService;
 public class YelpAPI {
 
     private static final String API_HOST = "api.yelp.com";
-    private static final String DEFAULT_TERM = "food";
+    private static final String DEFAULT_TERM = "restaurant";
     private static final String DEFAULT_LOCATION = "San Francisco, CA";
     private static final int SEARCH_LIMIT = 20;
     private static final String SEARCH_PATH = "/v2/search";
     private static final String BUSINESS_PATH = "/v2/business";
-    private static final int RADIUS_FILTER = 500;
+    private static final int RADIUS_FILTER = 750;
 
     /*
      * Update OAuth credentials below from the Yelp Developers API site:
@@ -76,6 +76,7 @@ public class YelpAPI {
         request.addQuerystringParameter("term", term);
         request.addQuerystringParameter("location", location);
         request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+        request.addQuerystringParameter("radius_filter", String.valueOf(RADIUS_FILTER));
         return sendRequestAndGetResponse(request);
     }
 
