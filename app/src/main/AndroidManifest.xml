@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="robert.com.foodious" >
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    package="foodious.com.foodious" >
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-        <activity
-            android:name="robert.com.foodious.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/splashScreenTheme" >
-            <meta-data android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+            <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyA4AlY-AhB3AwOsHZR15W67Acz__x-3Nnk"/>
+        <!--debug<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBz-x7ihtA1VTkPV3Zu6CzWGCMDbVBMYO0"/>-->
+               <activity
+                   android:name="foodious.com.foodious.MainActivity"
+                   android:label="@string/app_name"
+                   android:theme="@style/splashScreenTheme" >
+                   <meta-data android:name="com.google.android.gms.version"
+                       android:value="@integer/google_play_services_version" />
+                   <intent-filter>
+                       <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+                       <category android:name="android.intent.category.LAUNCHER" />
+                   </intent-filter>
+               </activity>
+           </application>
 
-</manifest>
+       </manifest>
